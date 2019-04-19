@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -120,6 +121,12 @@ public class GraphicalCalculatorFrame extends JFrame
 			// The regions should be spaced horizontally be REGION_INC_X
 			// The regions should be the same size
 			// There should be 5 regions
+			regions = new Rectangle[5];
+			for(int index = 0; index < regions.length; ++index)
+			{
+				regions[index] = new Rectangle(new Rectangle(REGION_START_X + (REGION_INC_X * index), 
+						REGION_START_Y, REGION_WIDTH, REGION_HEIGHT));
+			}			
 		}
 
 		/**
@@ -153,7 +160,11 @@ public class GraphicalCalculatorFrame extends JFrame
 			super.paintComponent(g);
 
 			// TODO: Draw bounding boxes on all regions (regions are stored as rectangles):
-
+			Graphics2D g2d = (Graphics2D) g;
+			for(Rectangle r: regions)
+			{
+				g2d.draw(r);
+			}
 			// Draw the text at the specified text points:
 			// Pattern is: operand operator operand operator operand = result
 			for (int pt = 0; pt < textPoints.length; pt++)
@@ -186,6 +197,12 @@ public class GraphicalCalculatorFrame extends JFrame
 			}
 
 			// TODO: Draw translucent rectangle over selected region (use the highlight color):
+			/*for(Rectangle r: regions)
+			{
+				g2d.setColor(highlight);
+				//g2d.fillRect(r.x, r.y, REGION_WIDTH, REGION_HEIGHT);
+			}*/
+			g2d.setColor(highlight);
 		}
 
 		/**
@@ -201,7 +218,14 @@ public class GraphicalCalculatorFrame extends JFrame
 		{
 			// If the mouse clicked within a region, set that region to be the selected region.
 			// TODO: check if a clicked point is within a region. If so, set that region to be selected.
-
+			Point tempPoint = e.getPoint();
+			for (int index = 0; index < regions.length; ++index)
+			{
+				if(regions[index].contains(tempPoint))
+				{
+					selectedRegion = index;
+				}
+			}
 			// Repaint the panel (this will implicitly call paintComponent):
 			this.repaint();
 		}
@@ -230,7 +254,31 @@ public class GraphicalCalculatorFrame extends JFrame
 			 *
 			 * Return false if the set operation cannot be done.
 			 */
-
+				if (selectedRegion == 0)
+				{
+					operands[0] = Integer.parseInt(content);
+				}
+				
+				if (selectedRegion == 1 )
+				{
+					return false;
+				}
+				
+				if (selectedRegion == 2)
+				{
+					operands[1] = Integer.parseInt(content);
+				}
+				
+				if (selectedRegion == 3)
+				{
+					return false;
+				}
+				
+				if (selectedRegion == 4)
+				{
+					operands[2] = Integer.parseInt(content);
+				}
+			
 			this.repaint();
 
 			return success;
@@ -244,7 +292,40 @@ public class GraphicalCalculatorFrame extends JFrame
 		 */
 		public int evaluate()
 		{
+			int firstOperation = 0;
+			int secondOperation = 0;
 			// TODO: evaluate the expression. (operand0 operator0 operand1) operator1 operand2
+			if (operators[0] == "*")
+			{
+				firstOperation = operands[0] * operands[1];
+			}
+			
+			else if (operators[0] == "-")
+			{
+				firstOperation = operands[0] - operands[1];
+			}
+			
+			else if (operators[0] == "+")
+			{
+				firstOperation = operands[0] + operands[1];
+			}
+			
+			if (operators[1] == "*")
+			{
+				secondOperation = firstOperation * operands[2];
+			}
+			
+			else if (operators[1] == "-")
+			{
+				secondOperation = firstOperation - operands[2];
+			}
+			
+			else if (operators[1] == "+")
+			{
+				secondOperation = firstOperation + operands[2];
+			}
+			
+			return secondOperation;
 		}
 
 		/** DO NOT MODIFY - DOES NOTHING */
