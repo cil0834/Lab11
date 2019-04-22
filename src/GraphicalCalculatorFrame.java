@@ -197,12 +197,9 @@ public class GraphicalCalculatorFrame extends JFrame
 			}
 
 			// TODO: Draw translucent rectangle over selected region (use the highlight color):
-			/*for(Rectangle r: regions)
-			{
-				g2d.setColor(highlight);
-				//g2d.fillRect(r.x, r.y, REGION_WIDTH, REGION_HEIGHT);
-			}*/
+			Rectangle r = regions[selectedRegion];
 			g2d.setColor(highlight);
+			g2d.fillRect(r.x, r.y, REGION_WIDTH, REGION_HEIGHT);
 		}
 
 		/**
@@ -224,11 +221,10 @@ public class GraphicalCalculatorFrame extends JFrame
 				if(regions[index].contains(tempPoint))
 				{
 					selectedRegion = index;
-					this.repaint();
 				}
 			}
 			// Repaint the panel (this will implicitly call paintComponent):
-			//this.repaint();
+			this.repaint();
 		}
 
 		/**
@@ -260,6 +256,10 @@ public class GraphicalCalculatorFrame extends JFrame
 				{
 					try {
 					    parsedInt = Integer.parseInt(content);
+					    if (parsedInt > 10 || parsedInt < 0)
+					    {
+					    	return false;
+					    }
 					  } catch (NumberFormatException e) {
 					    return false;
 					  }
@@ -281,6 +281,11 @@ public class GraphicalCalculatorFrame extends JFrame
 				{
 					try {
 					    parsedInt = Integer.parseInt(content);
+					    if (parsedInt > 10 || parsedInt < 0)
+					    {
+					    	return false;
+					    }
+
 					  } catch (NumberFormatException e) {
 					    return false;
 					  }
@@ -301,6 +306,10 @@ public class GraphicalCalculatorFrame extends JFrame
 				{
 					try {
 					    parsedInt = Integer.parseInt(content);
+					    if (parsedInt > 10 || parsedInt < 0)
+					    {
+					    	return false;
+					    }
 					  } catch (NumberFormatException e) {
 					    return false;
 					  }

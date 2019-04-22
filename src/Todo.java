@@ -22,7 +22,7 @@ Estimated Time (minutes):
 
 Actual Time (minutes):
 1. 15 
-2. not done
+2. 25
 3. 20
 4. 35
 5. 15
