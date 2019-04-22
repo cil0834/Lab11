@@ -224,10 +224,11 @@ public class GraphicalCalculatorFrame extends JFrame
 				if(regions[index].contains(tempPoint))
 				{
 					selectedRegion = index;
+					this.repaint();
 				}
 			}
 			// Repaint the panel (this will implicitly call paintComponent):
-			this.repaint();
+			//this.repaint();
 		}
 
 		/**
@@ -254,29 +255,56 @@ public class GraphicalCalculatorFrame extends JFrame
 			 *
 			 * Return false if the set operation cannot be done.
 			 */
+				int parsedInt = 0;
 				if (selectedRegion == 0)
 				{
-					operands[0] = Integer.parseInt(content);
+					try {
+					    parsedInt = Integer.parseInt(content);
+					  } catch (NumberFormatException e) {
+					    return false;
+					  }
+					operands[0] = parsedInt;
 				}
 				
-				if (selectedRegion == 1 )
+				if (selectedRegion == 1 && (content.equals("+") || content.equals("-") || content.equals("*")))
+				{
+					operators[0] = content;
+				}
+				
+				else if (selectedRegion == 1)
 				{
 					return false;
 				}
 				
+				
 				if (selectedRegion == 2)
 				{
-					operands[1] = Integer.parseInt(content);
+					try {
+					    parsedInt = Integer.parseInt(content);
+					  } catch (NumberFormatException e) {
+					    return false;
+					  }
+					operands[1] = parsedInt;
 				}
 				
-				if (selectedRegion == 3)
+				if (selectedRegion == 3 && (content.equals("+") || content.equals("-") || content.equals("*")))
+				{
+					operators[1] = content;
+				}
+				
+				else if (selectedRegion == 3)
 				{
 					return false;
 				}
 				
 				if (selectedRegion == 4)
 				{
-					operands[2] = Integer.parseInt(content);
+					try {
+					    parsedInt = Integer.parseInt(content);
+					  } catch (NumberFormatException e) {
+					    return false;
+					  }
+					operands[2] = parsedInt;
 				}
 			
 			this.repaint();
@@ -418,13 +446,26 @@ public class GraphicalCalculatorFrame extends JFrame
         this.setLayout(new GridLayout(2, 0));
 
         // TODO: add components to panels
+        panel1.add(operandEntry);
+        panel3.add(add);
+        panel3.add(subtract);
+        panel3.add(multiply);
+        panel2.add(setOperand);
+        panel2.add(setOperator);
+        panel4.add(errorMessage);
 
         // TODO: add radio buttons to the button group
+        ops.add(add);
+        ops.add(subtract);
+        ops.add(multiply);
         //default to + operator
         add.setSelected(true); //remember, the button group ensures only one button is selected
 
         // TODO: add sub-panels into panel 0
-
+        panel0.add(panel1);
+        panel0.add(panel2);
+        panel0.add(panel3);
+        panel0.add(panel4);
         // Adds all panels to frame:
         panel0.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT - 300));
 
@@ -440,6 +481,15 @@ public class GraphicalCalculatorFrame extends JFrame
          */
         setOperand.addActionListener((e) -> {
         		// TODO: attempt to modify the selected region in gcPanel with the new operand value.
+        	boolean valueSet = gcPanel.setSelectedRegionContents(operandEntry.getText());
+        	if(valueSet == false)
+        	{
+        		errorMessage.setText("Failed to set operand value");
+        	}
+        	else
+        	{
+        		errorMessage.setText("");
+        	}
         	}
         );
 
@@ -455,7 +505,47 @@ public class GraphicalCalculatorFrame extends JFrame
          */
         setOperator.addActionListener((e) -> {
     		// TODO: attempt to modify the selected region in gcPanel with the new operator value.
-        );
+        	boolean valueSet;
+        	if(add.isSelected())
+        	{
+        		valueSet = gcPanel.setSelectedRegionContents("+");
+        		if(valueSet == false)
+        		{
+        			errorMessage.setText("Failed to set operator value");
+        		}
+        		else
+        		{
+        			errorMessage.setText("");
+        		}
+        	}
+        	
+        	if(subtract.isSelected())
+        	{
+        		valueSet = gcPanel.setSelectedRegionContents("-");
+        		if(valueSet == false)
+        		{
+        			errorMessage.setText("Failed to set operator value");
+        		}
+        		else
+        		{
+        			errorMessage.setText("");
+        		}
+        	}
+        	
+        	if(multiply.isSelected())
+        	{
+        		valueSet = gcPanel.setSelectedRegionContents("*");
+        		if(valueSet == false)
+        		{
+        			errorMessage.setText("Failed to set operator value");
+        		}
+        		else
+        		{
+        			errorMessage.setText("");
+        		}
+        	}
+        	
+        });
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
